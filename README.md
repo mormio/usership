@@ -7,7 +7,7 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
    2. Install MySQL. For instance, in Mac OS shell: `brew install mysql` and then `brew services start mysql`
    3. You can now log into the DBMS with `mysql -u root` if you don't have a password, or `mysql -u root -p` if you do. 
 2. If you're starting afresh, instantiate the tables:
-   1. `cd /usership/data-access/create-tables.sql` 
+   1. `source /usership/data-access/create-tables.sql` 
 3. Launch the interface to manage and use your usership group:
    1. This is coming 
 
