@@ -3,7 +3,7 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
 
 # How to use this
 1. Establish the database. I did this locally:
-   1. Download [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/)
+   1. Download [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/) (note the SQL code in this repo is for v8.0.30)
    2. Install MySQL. For instance, in Mac OS shell: `brew install mysql` and then `brew services start mysql`
    3. You can now log into the DBMS with `mysql -u root` if you don't have a password, or `mysql -u root -p` if you do. 
 2. If you're starting afresh, instantiate the tables:
