@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS userships;
 USE userships;
 
 DROP TABLE IF EXISTS assets;
+DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS users;
 
 
@@ -17,7 +18,7 @@ INSERT INTO users
 VALUES
     ('Morgane', 'morgane@usership.go');
 
-CREATE TABLE assets (
+CREATE TABLE items (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(128) NOT NULL,
     current_user_id INT NOT NULL,
