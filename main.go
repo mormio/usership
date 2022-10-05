@@ -13,12 +13,6 @@ import (
 
 var db *sql.DB
 
-type User struct {
-	ID      int64
-	Name    string
-	Contact string
-}
-
 func main() {
 	// Capture connection properties.
 	cfg := mysql.Config{
