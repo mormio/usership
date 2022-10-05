@@ -1,7 +1,10 @@
 CREATE DATABASE IF NOT EXISTS userships;
 USE userships;
 
+DROP TABLE IF EXISTS assets;
 DROP TABLE IF EXISTS users;
+
+
 CREATE TABLE users (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(128) NOT NULL,
@@ -9,7 +12,11 @@ CREATE TABLE users (
     PRIMARY KEY (`id`)
 );
 
-DROP TABLE IF EXISTS assets;
+INSERT INTO users
+    (name, contact)
+VALUES
+    ('Morgane', 'morgane@usership.go');
+
 CREATE TABLE assets (
     id INT AUTO_INCREMENT NOT NULL,
     name VARCHAR(128) NOT NULL,
