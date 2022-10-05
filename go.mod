@@ -1,3 +1,5 @@
-go 1.17
+module github.com/dopaminegirl19/usership
 
-require https://github.com/golangci/golangci-lint
+go 1.19
+
+require github.com/go-sql-driver/mysql v1.6.0
