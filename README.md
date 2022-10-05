@@ -9,7 +9,7 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
 2. If you're starting afresh, instantiate the tables:
    1. `source /usership/data-access/create-tables.sql` 
 3. Import dependencies. The following commands import the dependencies in the go.mod file:
-   1. `cd data-access`
+   1. `cd usership`
    2. `go get .`
 4. While still in the data-access folder, run go.main to connect to your database according to your user and password (if you have one):
    1. `export DBUSER=root`
