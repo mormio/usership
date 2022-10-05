@@ -36,9 +36,12 @@ func main() {
 	}
 	fmt.Println("Connected!")
 
+
 	users, err := UsersByName("Morgane")
+
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Printf("Users found: %v\n", users)
 }
+
