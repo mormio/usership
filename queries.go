@@ -5,22 +5,6 @@ import (
 	"fmt"
 )
 
-// User struct info contains data fro 1 row of users table
-type User struct {
-	ID       int64
-	Name     string
-	Contact  string
-	Contact2 string
-}
-
-// Item struct info contains data fro 1 row of items table
-type Item struct {
-	ID            int64
-	Name          string
-	Description   string
-	CurrentUserID int64
-}
-
 // AddUser adds a row to the users table
 func AddUser(u User) (int64, error) {
 	result, err := db.Exec("INSERT INTO users (name, contact, contact2) VALUES (?, ?, ?)", u.Name, u.Contact, NewNullString(u.Contact2))
