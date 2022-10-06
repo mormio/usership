@@ -5,6 +5,19 @@ import (
 	"fmt"
 )
 
+// UpdateItemCurrentUser updates the current_user_id in an item's row
+func UpdateItemCurrentUser(itemID int64, newUserID int64) (int64, error) {
+	result, err := db.Exec("UPDATE items SET current_user_id = ? WHERE id = ?", newUserID, itemID)
+	if err != nil {
+		return 0, fmt.Errorf("UpdateItemCurrentUser: %v", err)
+	}
+	count, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("UpdateItemCurrentUser: %v", err)
+	}
+	return count, nil
+}
+
 // DeleteUser deletes a row from the users table
 func DeleteUser(userID int64) (int64, error) {
 
