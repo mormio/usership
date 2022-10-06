@@ -1,7 +1,7 @@
 # Usership software in Go
 Many of the things we consume we need but seldom use. Usership describes a mode of possession centered around sharing fewer objects within a group, rather than individual ownership of these items. The benefits of usership are cost efficiency and reduced consumption. <br><br>
 
-# How to use this
+# How to use this (mostly notes to self)
 1. Establish the MySQL server. I did this locally:
    1. Download [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/) (note the SQL code in this repo is for v8.0.30)
    2. Install MySQL. For instance, in Mac OS shell: `brew install mysql` and then `brew services start mysql`
@@ -22,8 +22,11 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
 # To do
 - [x] Investigate data connections. mysql ~~or just dataframes in the meantime?~~
 - [x] Establish database structure 
-- [ ] Write functions for accessing database. 
-- [ ] Write interface. <br><br>
+- [ ] Write functions for accessing database. Remaining functions:
+  - [ ] Return items by matching name
+  - [ ] For a given item ID, return its current user
+- [ ] Write interface. 
+  - [ ] https://earthly.dev/blog/tui-app-with-go/ <br><br>
 
 # Requirements
 * Installation of [Go](https://go.dev/doc/install)
