@@ -17,7 +17,32 @@ type User struct {
 type Item struct {
 	ID            int64
 	Name          string
+	Description   string
 	CurrentUserID int64
+}
+
+// ItemsByString queries for items which match a string either in name or description.
+func ItemsByString(queryString string) ([]Item, error) {
+	var items []Item
+
+	rows, err := db.Query("SELECT * FROM items WHERE name LIKE '%?%' OR description LIKE '%?%'", queryString, queryString)
+	if err != nil {
+		return nil, fmt.Errorf("ItemsByString %q: %v", queryString, err)
+	}
+	defer rows.Close()
+
+	// Loop through rows, using Scan to assign column data to struct fields.
+	for rows.Next() {
+		var i Item
+		if err := rows.Scan(&i.ID, &i.Name, &i.Description, &i.CurrentUserID); err != nil {
+			return nil, fmt.Errorf("ItemsByUser %q: %v", queryString, err)
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("ItemsByUser %q: %v", queryString, err)
+	}
+	return items, nil
 }
 
 // UserByID queries for the user with a specific ID
@@ -49,7 +74,7 @@ func ItemsByUser(queryUserid int64) ([]Item, error) {
 	// Loop through rows, using Scan to assign column data to struct fields.
 	for rows.Next() {
 		var i Item
-		if err := rows.Scan(&i.ID, &i.Name, &i.CurrentUserID); err != nil {
+		if err := rows.Scan(&i.ID, &i.Name, &i.Description, &i.CurrentUserID); err != nil {
 			return nil, fmt.Errorf("ItemsByUser %q: %v", queryUserid, err)
 		}
 		items = append(items, i)
