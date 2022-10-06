@@ -25,6 +25,12 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
 - [ ] Write functions for accessing database. Remaining functions:
   - [ ] Return items by matching name
   - [ ] For a given item ID, return its current user
+  - [ ] Add an item
+  - [ ] Delete an item 
+  - [ ] Add a user
+  - [ ] Delete a user
+  - [ ] Change the current user of an item
+  - [ ] Change the contact info of a user
 - [ ] Write interface. 
   - [ ] https://earthly.dev/blog/tui-app-with-go/ <br><br>
 
