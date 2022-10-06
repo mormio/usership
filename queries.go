@@ -21,6 +21,32 @@ type Item struct {
 	CurrentUserID int64
 }
 
+// AddUser adds a row to the users table
+func AddUser(u User) (int64, error) {
+	result, err := db.Exec("INSERT INTO users (name, contact, contact2) VALUES (?, ?, ?)", u.Name, u.Contact, NewNullString(u.Contact2))
+	if err != nil {
+		return 0, fmt.Errorf("AddUser: %v", err)
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("AddUser: %v", err)
+	}
+	return id, nil
+}
+
+// AddItem adds a row to the items table
+func AddItem(i Item) (int64, error) {
+	result, err := db.Exec("INSERT INTO items (name, description, current_user_id) VALUES (?, ?, ?)", i.Name, NewNullString(i.Description), i.CurrentUserID)
+	if err != nil {
+		return 0, fmt.Errorf("AddItem: %v", err)
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("AddItem: %v", err)
+	}
+	return id, nil
+}
+
 // UserByItemID queries for the user that's currently in possession of an item.
 func UserByItemID(queryItemID int64) (User, error) {
 	var u User
