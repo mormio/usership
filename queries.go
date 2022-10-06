@@ -5,6 +5,19 @@ import (
 	"fmt"
 )
 
+// UpdateUser updates the name and/or contact info of a user
+func UpdateUser(u User) (int64, error) {
+	result, err := db.Exec("UPDATE users SET name = ?, contact = ?, contact2 = ? WHERE id = ?", u.Name, u.Contact, NewNullString(u.Contact2))
+	if err != nil {
+		return 0, fmt.Errorf("UpdateUser: %v", err)
+	}
+	count, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("UpdateUser: %v", err)
+	}
+	return count, nil
+}
+
 // UpdateItemCurrentUser updates the current_user_id in an item's row
 func UpdateItemCurrentUser(itemID int64, newUserID int64) (int64, error) {
 	result, err := db.Exec("UPDATE items SET current_user_id = ? WHERE id = ?", newUserID, itemID)

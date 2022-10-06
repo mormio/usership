@@ -22,15 +22,15 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
 # To do
 - [x] Investigate data connections. mysql ~~or just dataframes in the meantime?~~
 - [x] Establish database structure
-- [ ] Write functions for accessing database. Remaining functions:
+- [x] Write functions for accessing database. Remaining functions:
   - [x] Return items by matching name
   - [x] For a given item ID, return its current user
   - [x] Add an item
-  - [ ] Delete an item
+  - [x] Delete an item
   - [x] Add a user
-  - [ ] Delete a user
-  - [ ] Change the current user of an item
-  - [ ] Change the contact info of a user
+  - [x] Delete a user
+  - [x] Change the current user of an item
+  - [x] Change the contact info of a user
 - [ ] Write interface.
   - [ ] https://earthly.dev/blog/tui-app-with-go/ <br><br>
 
