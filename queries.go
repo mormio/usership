@@ -5,6 +5,34 @@ import (
 	"fmt"
 )
 
+// DeleteUser deletes a row from the users table
+func DeleteUser(userID int64) (int64, error) {
+
+	result, err := db.Exec("DELETE FROM users WHERE id = ?", userID)
+	if err != nil {
+		return 0, fmt.Errorf("DeleteUser: %v", err)
+	}
+	count, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("DeleteUser: %v", err)
+	}
+	return count, nil
+}
+
+// DeleteItem deletes a row from the items table
+func DeleteItem(itemID int64) (int64, error) {
+
+	result, err := db.Exec("DELETE FROM items WHERE id = ?", itemID)
+	if err != nil {
+		return 0, fmt.Errorf("DeleteItem: %v", err)
+	}
+	count, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("DeleteItem: %v", err)
+	}
+	return count, nil
+}
+
 // AddUser adds a row to the users table
 func AddUser(u User) (int64, error) {
 	result, err := db.Exec("INSERT INTO users (name, contact, contact2) VALUES (?, ?, ?)", u.Name, u.Contact, NewNullString(u.Contact2))
