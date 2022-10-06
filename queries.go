@@ -21,6 +21,23 @@ type Item struct {
 	CurrentUserID int64
 }
 
+// UserByItemID queries for the user that's currently in possession of an item.
+func UserByItemID(queryItemID int64) (User, error) {
+	var u User
+	// find the item corresponding to that item id
+	item, err := ItemByID(queryItemID)
+	if err != nil {
+		return u, fmt.Errorf("UserByItemID %q: %v", queryItemID, err)
+	}
+	// find the user corresponding to item's current user id
+	user, err := UserByID(item.CurrentUserID)
+	if err != nil {
+		return u, fmt.Errorf("UserByItemID %q: %v", queryItemID, err)
+	}
+
+	return user, nil
+}
+
 // ItemsByString queries for items which match a string either in name or description.
 func ItemsByString(queryString string) ([]Item, error) {
 	var items []Item
@@ -58,6 +75,21 @@ func UserByID(queryUserid int64) (User, error) {
 		return u, fmt.Errorf("UserByID %d: %v", queryUserid, err)
 	}
 	return u, nil
+}
+
+// ItemByID queries for the user with a specific ID
+func ItemByID(queryItemID int64) (Item, error) {
+	// An album to hold data from the returned row.
+	var i Item
+
+	row := db.QueryRow("SELECT * FROM album WHERE id = ?", queryItemID)
+	if err := row.Scan(&i.ID, &i.Name, &i.Description, &i.CurrentUserID); err != nil {
+		if err == sql.ErrNoRows {
+			return i, fmt.Errorf("UserByID %d: no such user", queryItemID)
+		}
+		return i, fmt.Errorf("UserByID %d: %v", queryItemID, err)
+	}
+	return i, nil
 }
 
 // ItemsByUser queries for items that are in the possession of a user (by user ID)
