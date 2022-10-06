@@ -3,12 +3,12 @@
 package main
 
 import (
+	"github.com/go-sql-driver/mysql"
+
 	"database/sql"
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/go-sql-driver/mysql"
 )
 
 var db *sql.DB
@@ -36,7 +36,6 @@ func main() {
 	}
 	fmt.Println("Connected!")
 
-
 	users, err := UsersByName("Morgane")
 
 	if err != nil {
@@ -44,4 +43,3 @@ func main() {
 	}
 	fmt.Printf("Users found: %v\n", users)
 }
-
