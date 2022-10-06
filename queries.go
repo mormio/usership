@@ -7,13 +7,26 @@ import (
 
 // UpdateUser updates the name and/or contact info of a user
 func UpdateUser(u User) (int64, error) {
-	result, err := db.Exec("UPDATE users SET name = ?, contact = ?, contact2 = ? WHERE id = ?", u.Name, u.Contact, NewNullString(u.Contact2))
+	result, err := db.Exec("UPDATE users SET name = ?, contact = ?, contact2 = ? WHERE id = ?", u.Name, u.Contact, NewNullString(u.Contact2), u.ID)
 	if err != nil {
 		return 0, fmt.Errorf("UpdateUser: %v", err)
 	}
 	count, err := result.RowsAffected()
 	if err != nil {
 		return 0, fmt.Errorf("UpdateUser: %v", err)
+	}
+	return count, nil
+}
+
+// UpdateItem updates the name and/or description of an item
+func UpdateItem(i Item) (int64, error) {
+	result, err := db.Exec("UPDATE items SET name = ?, description = ?, WHERE id = ?", i.Name, NewNullString(i.Description), i.ID)
+	if err != nil {
+		return 0, fmt.Errorf("UpdateItem: %v", err)
+	}
+	count, err := result.RowsAffected()
+	if err != nil {
+		return 0, fmt.Errorf("UpdateItem: %v", err)
 	}
 	return count, nil
 }
