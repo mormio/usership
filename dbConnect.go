@@ -13,7 +13,7 @@ import (
 
 var db *sql.DB
 
-func main() {
+func dbconnect() {
 	// Capture connection properties.
 	cfg := mysql.Config{
 		User:                 os.Getenv("DBUSER"),
