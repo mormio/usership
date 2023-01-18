@@ -1,45 +1,67 @@
-// Written according to the tutorial at: https://go.dev/doc/tutorial/database-access
-
 package main
 
 import (
-	"github.com/go-sql-driver/mysql"
-
-	"database/sql"
-	"fmt"
-	"log"
-	"os"
+	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
 )
 
-var db *sql.DB
+type Contact struct {
+	firstName   string
+	lastName    string
+	email       string
+	phoneNumber string
+	business    bool
+}
+
+var contacts []Contact
+
+var items []Item
+
+var form = tview.NewForm()
+
+var app = tview.NewApplication()
+var text = tview.NewTextView().
+	SetTextColor(tcell.ColorGreenYellow).
+	SetText("(a) to add a new contact \n(q) to quit")
 
 func main() {
-	// Capture connection properties.
-	cfg := mysql.Config{
-		User:                 os.Getenv("DBUSER"),
-		Passwd:               os.Getenv("DBPASS"),
-		Net:                  "tcp",
-		Addr:                 "127.0.0.1:3306",
-		DBName:               "userships",
-		AllowNativePasswords: true,
+	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		if event.Rune() == 113 {
+			app.Stop()
+		} else if event.Rune() == 97 {
+			addContactForm()
+		}
+		return event
+	})
+	if err := app.SetRoot(text, true).EnableMouse(true).Run(); err != nil {
+		panic(err)
 	}
-	// Get a database handle.
-	var err error
-	db, err = sql.Open("mysql", cfg.FormatDSN())
-	if err != nil {
-		log.Fatal(err)
-	}
+}
 
-	pingErr := db.Ping()
-	if pingErr != nil {
-		log.Fatal(pingErr)
-	}
-	fmt.Println("Connected!")
+func addContactForm() {
+	contact := Contact{}
 
-	users, err := UsersByName("Morgane")
+	form.AddInputField("First Name", "", 20, nil, func(firstName string) {
+		contact.firstName = firstName
+	})
 
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Users found: %v\n", users)
+	form.AddInputField("Last Name", "", 20, nil, func(lastName string) {
+		contact.lastName = lastName
+	})
+
+	form.AddInputField("Email", "", 20, nil, func(email string) {
+		contact.email = email
+	})
+
+	form.AddInputField("Phone", "", 20, nil, func(phone string) {
+		contact.phoneNumber = phone
+	})
+
+	form.AddCheckbox("Business", false, func(business bool) {
+		contact.business = business
+	})
+
+	form.AddButton("Save", func() {
+		contacts = append(contacts, contact)
+	})
 }
