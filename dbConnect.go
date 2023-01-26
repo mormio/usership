@@ -13,7 +13,7 @@ import (
 
 var db *sql.DB
 
-func dbconnect() {
+func DBconnect() {
 	// Capture connection properties.
 	cfg := mysql.Config{
 		User:                 os.Getenv("DBUSER"),
@@ -35,11 +35,4 @@ func dbconnect() {
 		log.Fatal(pingErr)
 	}
 	fmt.Println("Connected!")
-
-	users, err := UsersByName("Morgane")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Users found: %v\n", users)
 }

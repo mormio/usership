@@ -3,7 +3,29 @@ package main
 import (
 	"database/sql"
 	"fmt"
+
+	"github.com/rivo/tview"
 )
+
+var usersList = tview.NewList().ShowSecondaryText(false)
+
+// UsersList returns all the users as a list viewable in the TUI
+func UsersList() {
+	usersList.Clear()
+	var users []User
+
+	rows, err := db.Query("SELECT * FROM users")
+	if err != nil {
+		fmt.Println(fmt.Errorf("UsersList: %v", err))
+	}
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.ID, &u.Name, &u.Contact, &u.Contact2); err != nil {
+			fmt.Println(fmt.Errorf("UsersList: %v", err))
+		}
+		users = append(users, u)
+	}
+}
 
 // UpdateUser updates the name and/or contact info of a user
 func UpdateUser(u User) (int64, error) {
