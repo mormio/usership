@@ -1,20 +1,12 @@
 package main
 
 import (
-	"strconv"
-
 	"github.com/rivo/tview"
 )
 
 func AddUserForm() *tview.Form {
 
 	user := User{}
-
-	form.AddInputField("user id", "", 20, nil, func(userID string) {
-		ID, _ := strconv.Atoi(userID)
-		user.ID = int64(ID)
-	})
-
 	form.AddInputField("name", "", 20, nil, func(Name string) {
 		user.Name = Name
 	})
@@ -28,8 +20,11 @@ func AddUserForm() *tview.Form {
 	})
 
 	form.AddButton("Save", func() {
+		// users = append(users, user)
+		id, _ := AddUser(user)
+		_ = id
+		AddUsersList()
 		users = append(users, user)
-		addUsersList()
 		pages.SwitchToPage("Menu")
 	})
 

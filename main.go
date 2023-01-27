@@ -22,10 +22,17 @@ func main() {
 
 	DBconnect()
 
+	usersList.SetSelectedFunc(func(index int, name string, contact string, shortcut rune) {
+		SetConcatText(&users[index])
+	})
+
 	flex.SetDirection(tview.FlexRow).
 		AddItem(tview.NewFlex().
-			AddItem(usersList, 0, 1, true), 0, 6, true).
+			AddItem(usersList, 0, 2, true).
+			AddItem(userText, 0, 4, false), 0, 6, false).
 		AddItem(text, 0, 1, false)
+
+	AddUsersList()
 
 	flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch {

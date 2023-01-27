@@ -1,14 +1,32 @@
 package main
 
-func addUsersList() {
+import (
+	"fmt"
+	"strconv"
+)
+
+func AddUsersList() {
 	usersList.Clear()
-	for index, user := range users {
-		usersList.AddItem(user.Name+" "+user.Contact, " ", rune(49+index), nil)
+
+	rows, err := db.Query("SELECT id, name, contact, COALESCE(contact2, '') FROM users")
+	if err != nil {
+		fmt.Printf("ItemsByString: %v", err)
+	}
+	defer rows.Close()
+
+	// Loop through rows, using Scan to assign column data to struct fields.
+	for rows.Next() {
+		var u User
+		if err := rows.Scan(&u.ID, &u.Name, &u.Contact, &u.Contact2); err != nil {
+			fmt.Printf("ItemsByUser: %v", err)
+		}
+		users = append(users, u)
+		usersList.AddItem(strconv.Itoa(int(u.ID))+" "+u.Name, " ", rune('☺'), nil)
 	}
 }
 
-func setConcatText(user *User) {
+func SetConcatText(user *User) {
 	userText.Clear()
-	text := user.Name + " " + user.Contact + "\n" + user.Contact2
+	text := user.Name + "\n" + user.Contact + "\n" + user.Contact2
 	userText.SetText(text)
 }
