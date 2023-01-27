@@ -141,10 +141,10 @@ func ItemsByString(queryString string) ([]Item, error) {
 
 // UserByID queries for the user with a specific ID
 func UserByID(queryUserid int32) (User, error) {
-	// An album to hold data from the returned row.
+	// A user to hold data from the returned row.
 	var u User
 
-	row := db.QueryRow("SELECT * FROM album WHERE id = ?", queryUserid)
+	row := db.QueryRow("SELECT * FROM users WHERE id = ?", queryUserid)
 	if err := row.Scan(&u.ID, &u.Name, &u.Contact, &u.Contact2); err != nil {
 		if err == sql.ErrNoRows {
 			return u, fmt.Errorf("UserByID %d: no such user", queryUserid)
@@ -156,10 +156,10 @@ func UserByID(queryUserid int32) (User, error) {
 
 // ItemByID queries for the user with a specific ID
 func ItemByID(queryItemID int32) (Item, error) {
-	// An album to hold data from the returned row.
+	// An item to hold data from the returned row.
 	var i Item
 
-	row := db.QueryRow("SELECT * FROM album WHERE id = ?", queryItemID)
+	row := db.QueryRow("SELECT * FROM users WHERE id = ?", queryItemID)
 	if err := row.Scan(&i.ID, &i.Name, &i.Description, &i.CurrentUserID); err != nil {
 		if err == sql.ErrNoRows {
 			return i, fmt.Errorf("UserByID %d: no such user", queryItemID)

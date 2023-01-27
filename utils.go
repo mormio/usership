@@ -65,7 +65,7 @@ func SetItemText(item *Item) {
 	itemText.Clear()
 
 	// Get current user info
-	current_user, _ := UserByID(item.CurrentUserID)
+	current_user, _ := UserByID(int32(item.CurrentUserID))
 
 	text := item.Name + "\n" + item.Description + "\n\nCurrent user: \n" + current_user.Name + "\n" + current_user.Contact + "\n" + current_user.Contact2
 
