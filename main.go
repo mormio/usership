@@ -1,8 +1,6 @@
 package main
 
 import (
-	"strconv"
-
 	tcell "github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -14,7 +12,7 @@ var pages = tview.NewPages()
 var userText = tview.NewTextView()
 var app = tview.NewApplication()
 var form = tview.NewForm()
-var UsersList = tview.NewList().ShowSecondaryText(false)
+var usersList = tview.NewList().ShowSecondaryText(false)
 var flex = tview.NewFlex()
 var text = tview.NewTextView().
 	SetTextColor(tcell.ColorGreenYellow).
@@ -26,7 +24,7 @@ func main() {
 
 	flex.SetDirection(tview.FlexRow).
 		AddItem(tview.NewFlex().
-			AddItem(UsersList, 0, 1, true), 0, 6, true).
+			AddItem(usersList, 0, 1, true), 0, 6, true).
 		AddItem(text, 0, 1, false)
 
 	flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
@@ -35,7 +33,7 @@ func main() {
 			app.Stop()
 		case event.Rune() == 117:
 			form.Clear(true)
-			addUserForm()
+			AddUserForm()
 			pages.SwitchToPage("Add User")
 		case event.Rune() == 105:
 			form.Clear(true)
@@ -52,47 +50,4 @@ func main() {
 	if err := app.SetRoot(pages, true).EnableMouse(true).Run(); err != nil {
 		panic(err)
 	}
-}
-
-func addUsersList() {
-	UsersList.Clear()
-	for index, user := range users {
-		UsersList.AddItem(user.Name+" "+user.Contact, " ", rune(49+index), nil)
-	}
-}
-
-func addUserForm() *tview.Form {
-
-	user := User{}
-
-	form.AddInputField("user id", "", 20, nil, func(userID string) {
-		ID, _ := strconv.Atoi(userID)
-		user.ID = int64(ID)
-	})
-
-	form.AddInputField("name", "", 20, nil, func(Name string) {
-		user.Name = Name
-	})
-
-	form.AddInputField("contact", "", 20, nil, func(Contact string) {
-		user.Contact = Contact
-	})
-
-	form.AddInputField("contact2", "", 20, nil, func(Contact2 string) {
-		user.Contact2 = Contact2
-	})
-
-	form.AddButton("Save", func() {
-		users = append(users, user)
-		addUsersList()
-		pages.SwitchToPage("Menu")
-	})
-
-	return form
-}
-
-func setConcatText(user *User) {
-	userText.Clear()
-	text := user.Name + " " + user.Contact + "\n" + user.Contact2
-	userText.SetText(text)
 }
