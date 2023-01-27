@@ -32,7 +32,7 @@ func UpdateItem(i Item) (int64, error) {
 }
 
 // UpdateItemCurrentUser updates the current_user_id in an item's row
-func UpdateItemCurrentUser(itemID int64, newUserID int64) (int64, error) {
+func UpdateItemCurrentUser(itemID int32, newUserID int32) (int64, error) {
 	result, err := db.Exec("UPDATE items SET current_user_id = ? WHERE id = ?", newUserID, itemID)
 	if err != nil {
 		return 0, fmt.Errorf("UpdateItemCurrentUser: %v", err)
@@ -45,7 +45,7 @@ func UpdateItemCurrentUser(itemID int64, newUserID int64) (int64, error) {
 }
 
 // DeleteUser deletes a row from the users table
-func DeleteUser(userID int64) (int64, error) {
+func DeleteUser(userID int32) (int64, error) {
 
 	result, err := db.Exec("DELETE FROM users WHERE id = ?", userID)
 	if err != nil {
@@ -59,7 +59,7 @@ func DeleteUser(userID int64) (int64, error) {
 }
 
 // DeleteItem deletes a row from the items table
-func DeleteItem(itemID int64) (int64, error) {
+func DeleteItem(itemID int32) (int64, error) {
 
 	result, err := db.Exec("DELETE FROM items WHERE id = ?", itemID)
 	if err != nil {
@@ -73,7 +73,7 @@ func DeleteItem(itemID int64) (int64, error) {
 }
 
 // AddUser adds a row to the users table
-func AddUser(u User) (int64, error) {
+func AddUser(u User) (int32, error) {
 	result, err := db.Exec("INSERT INTO users (name, contact, contact2) VALUES (?, ?, ?)", u.Name, u.Contact, NewNullString(u.Contact2))
 	if err != nil {
 		return 0, fmt.Errorf("AddUser: %v", err)
@@ -82,11 +82,11 @@ func AddUser(u User) (int64, error) {
 	if err != nil {
 		return 0, fmt.Errorf("AddUser: %v", err)
 	}
-	return id, nil
+	return int32(id), nil
 }
 
 // AddItem adds a row to the items table
-func AddItem(i Item) (int64, error) {
+func AddItem(i Item) (int32, error) {
 	result, err := db.Exec("INSERT INTO items (name, description, current_user_id) VALUES (?, ?, ?)", i.Name, NewNullString(i.Description), i.CurrentUserID)
 	if err != nil {
 		return 0, fmt.Errorf("AddItem: %v", err)
@@ -95,11 +95,11 @@ func AddItem(i Item) (int64, error) {
 	if err != nil {
 		return 0, fmt.Errorf("AddItem: %v", err)
 	}
-	return id, nil
+	return int32(id), nil
 }
 
 // UserByItemID queries for the user that's currently in possession of an item.
-func UserByItemID(queryItemID int64) (User, error) {
+func UserByItemID(queryItemID int32) (User, error) {
 	var u User
 	// find the item corresponding to that item id
 	item, err := ItemByID(queryItemID)
@@ -140,7 +140,7 @@ func ItemsByString(queryString string) ([]Item, error) {
 }
 
 // UserByID queries for the user with a specific ID
-func UserByID(queryUserid int64) (User, error) {
+func UserByID(queryUserid int32) (User, error) {
 	// An album to hold data from the returned row.
 	var u User
 
@@ -155,7 +155,7 @@ func UserByID(queryUserid int64) (User, error) {
 }
 
 // ItemByID queries for the user with a specific ID
-func ItemByID(queryItemID int64) (Item, error) {
+func ItemByID(queryItemID int32) (Item, error) {
 	// An album to hold data from the returned row.
 	var i Item
 
@@ -170,7 +170,7 @@ func ItemByID(queryItemID int64) (Item, error) {
 }
 
 // ItemsByUser queries for items that are in the possession of a user (by user ID)
-func ItemsByUser(queryUserid int64) ([]Item, error) {
+func ItemsByUser(queryUserid int32) ([]Item, error) {
 	// an items slice to hold data from returned rows.
 	var items []Item
 

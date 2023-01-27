@@ -5,13 +5,13 @@ import (
 	"github.com/rivo/tview"
 )
 
-var users = make([]User, 0)
-
 // Tview
 var pages = tview.NewPages()
+var itemText = tview.NewTextView()
 var userText = tview.NewTextView()
 var app = tview.NewApplication()
-var form = tview.NewForm()
+var form = tview.NewForm().SetFieldBackgroundColor(tcell.ColorMediumVioletRed)
+var itemsList = tview.NewList().ShowSecondaryText(false)
 var usersList = tview.NewList().ShowSecondaryText(false)
 var flex = tview.NewFlex()
 var text = tview.NewTextView().
@@ -21,18 +21,13 @@ var text = tview.NewTextView().
 func main() {
 
 	DBconnect()
-
-	usersList.SetSelectedFunc(func(index int, name string, contact string, shortcut rune) {
-		SetConcatText(&users[index])
-	})
+	AddItemsList()
 
 	flex.SetDirection(tview.FlexRow).
 		AddItem(tview.NewFlex().
-			AddItem(usersList, 0, 2, true).
-			AddItem(userText, 0, 4, false), 0, 6, false).
+			AddItem(itemsList, 0, 2, true).
+			AddItem(itemText, 0, 4, false), 0, 6, false).
 		AddItem(text, 0, 1, false)
-
-	AddUsersList()
 
 	flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch {
@@ -44,7 +39,7 @@ func main() {
 			pages.SwitchToPage("Add User")
 		case event.Rune() == 105:
 			form.Clear(true)
-			// AddItemForm()
+			AddItemForm()
 			pages.SwitchToPage("Add Item")
 		}
 		return event
