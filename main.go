@@ -1,67 +1,60 @@
 package main
 
 import (
-	"github.com/gdamore/tcell/v2"
+	tcell "github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
-type Contact struct {
-	firstName   string
-	lastName    string
-	email       string
-	phoneNumber string
-	business    bool
-}
+var users = make([]User, 0)
 
-var contacts []Contact
-
-var items []Item
-
-var form = tview.NewForm()
-
+// Tview
+var pages = tview.NewPages()
+var userText = tview.NewTextView()
 var app = tview.NewApplication()
+var form = tview.NewForm()
+var usersList = tview.NewList().ShowSecondaryText(false)
+var flex = tview.NewFlex()
 var text = tview.NewTextView().
 	SetTextColor(tcell.ColorGreenYellow).
-	SetText("(a) to add a new contact \n(q) to quit")
+	SetText("(u) to add a new user \n(i) to add a new item \n(q) to quit")
 
 func main() {
-	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		if event.Rune() == 113 {
+
+	DBconnect()
+
+	usersList.SetSelectedFunc(func(index int, name string, contact string, shortcut rune) {
+		SetConcatText(&users[index])
+	})
+
+	flex.SetDirection(tview.FlexRow).
+		AddItem(tview.NewFlex().
+			AddItem(usersList, 0, 2, true).
+			AddItem(userText, 0, 4, false), 0, 6, false).
+		AddItem(text, 0, 1, false)
+
+	AddUsersList()
+
+	flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch {
+		case event.Rune() == 113:
 			app.Stop()
-		} else if event.Rune() == 97 {
-			addContactForm()
+		case event.Rune() == 117:
+			form.Clear(true)
+			AddUserForm()
+			pages.SwitchToPage("Add User")
+		case event.Rune() == 105:
+			form.Clear(true)
+			// AddItemForm()
+			pages.SwitchToPage("Add Item")
 		}
 		return event
 	})
-	if err := app.SetRoot(text, true).EnableMouse(true).Run(); err != nil {
+
+	pages.AddPage("Menu", flex, true, true)
+	pages.AddPage("Add User", form, true, false)
+	pages.AddPage("Add Item", form, true, false)
+
+	if err := app.SetRoot(pages, true).EnableMouse(true).Run(); err != nil {
 		panic(err)
 	}
-}
-
-func addContactForm() {
-	contact := Contact{}
-
-	form.AddInputField("First Name", "", 20, nil, func(firstName string) {
-		contact.firstName = firstName
-	})
-
-	form.AddInputField("Last Name", "", 20, nil, func(lastName string) {
-		contact.lastName = lastName
-	})
-
-	form.AddInputField("Email", "", 20, nil, func(email string) {
-		contact.email = email
-	})
-
-	form.AddInputField("Phone", "", 20, nil, func(phone string) {
-		contact.phoneNumber = phone
-	})
-
-	form.AddCheckbox("Business", false, func(business bool) {
-		contact.business = business
-	})
-
-	form.AddButton("Save", func() {
-		contacts = append(contacts, contact)
-	})
 }
