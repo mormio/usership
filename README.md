@@ -15,9 +15,8 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
    1. `export DBUSER=root`
    2. `export DBPASS=`
    3. `go run .`
-   4. The command interface should return a message: "Connected!"
-5. Launch the interface to manage and use your usership group:
-   1. This is coming
+   4. The interface will launch
+
 
 # To do
 - [x] Investigate data connections. mysql ~~or just dataframes in the meantime?~~
