@@ -4,11 +4,14 @@ import (
 	queries "github.com/dopaminegirl19/usership/pkg/queries"
 	structs "github.com/dopaminegirl19/usership/pkg/structs"
 
+	"database/sql"
 	"fmt"
 	"strconv"
 
 	tview "github.com/rivo/tview"
 )
+
+var db *sql.DB
 
 var itemText = tview.NewTextView()
 var userText = tview.NewTextView()

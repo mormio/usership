@@ -8,6 +8,8 @@ import (
 	"fmt"
 )
 
+var db *sql.DB
+
 // UpdateUser updates the name and/or contact info of a user
 func UpdateUser(u structs.User) (int64, error) {
 	result, err := db.Exec("UPDATE users SET name = ?, contact = ?, contact2 = ? WHERE id = ?", u.Name, u.Contact, sqlutils.NewNullString(u.Contact2), u.ID)
