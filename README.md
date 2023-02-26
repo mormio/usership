@@ -1,6 +1,10 @@
 # Usership software in Go
 Many of the things we consume we need but seldom use. Usership describes a mode of possession centered around sharing fewer objects within a group, rather than individual ownership of these items. The benefits of usership are cost efficiency and reduced consumption. <br><br>
 
+This is a work in progress. <br>
+
+![](demo_vid.giF)
+
 # How to use this (mostly notes to self)
 1. Establish the MySQL server. I did this locally:
    1. Download [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/) (note the SQL code in this repo is for v8.0.30)
