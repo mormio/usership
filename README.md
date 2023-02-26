@@ -3,7 +3,7 @@ Many of the things we consume we need but seldom use. Usership describes a mode 
 
 This is a work in progress. <br>
 
-![](demo_vid.giF)
+![](demo_vid.gif)
 
 # How to use this (mostly notes to self)
 1. Establish the MySQL server. I did this locally:
