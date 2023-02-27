@@ -8,10 +8,9 @@ import (
 	"fmt"
 )
 
-var db *sql.DB
 
 // UpdateUser updates the name and/or contact info of a user
-func UpdateUser(u structs.User) (int64, error) {
+func UpdateUser(u structs.User, db *sql.DB) (int64, error) {
 	result, err := db.Exec("UPDATE users SET name = ?, contact = ?, contact2 = ? WHERE id = ?", u.Name, u.Contact, sqlutils.NewNullString(u.Contact2), u.ID)
 	if err != nil {
 		return 0, fmt.Errorf("UpdateUser: %v", err)
@@ -24,7 +23,7 @@ func UpdateUser(u structs.User) (int64, error) {
 }
 
 // UpdateItem updates the name and/or description of an item
-func UpdateItem(i structs.Item) (int64, error) {
+func UpdateItem(i structs.Item, db *sql.DB) (int64, error) {
 	result, err := db.Exec("UPDATE items SET name = ?, description = ?, WHERE id = ?", i.Name, sqlutils.NewNullString(i.Description), i.ID)
 	if err != nil {
 		return 0, fmt.Errorf("UpdateItem: %v", err)
@@ -37,7 +36,7 @@ func UpdateItem(i structs.Item) (int64, error) {
 }
 
 // UpdateItemCurrentUser updates the current_user_id in an item's row
-func UpdateItemCurrentUser(itemID int32, newUserID int32) (int64, error) {
+func UpdateItemCurrentUser(itemID int32, newUserID int32, db *sql.DB) (int64, error) {
 	result, err := db.Exec("UPDATE items SET current_user_id = ? WHERE id = ?", newUserID, itemID)
 	if err != nil {
 		return 0, fmt.Errorf("UpdateItemCurrentUser: %v", err)
@@ -50,7 +49,7 @@ func UpdateItemCurrentUser(itemID int32, newUserID int32) (int64, error) {
 }
 
 // DeleteUser deletes a row from the users table
-func DeleteUser(userID int32) (int64, error) {
+func DeleteUser(userID int32, db *sql.DB) (int64, error) {
 
 	result, err := db.Exec("DELETE FROM users WHERE id = ?", userID)
 	if err != nil {
@@ -64,7 +63,7 @@ func DeleteUser(userID int32) (int64, error) {
 }
 
 // DeleteItem deletes a row from the items table
-func DeleteItem(itemID int32) (int64, error) {
+func DeleteItem(itemID int32, db *sql.DB) (int64, error) {
 
 	result, err := db.Exec("DELETE FROM items WHERE id = ?", itemID)
 	if err != nil {
@@ -78,7 +77,7 @@ func DeleteItem(itemID int32) (int64, error) {
 }
 
 // AddUser adds a row to the users table
-func AddUser(u structs.User) (int32, error) {
+func AddUser(u structs.User, db *sql.DB) (int32, error) {
 	result, err := db.Exec("INSERT INTO users (name, contact, contact2) VALUES (?, ?, ?)", u.Name, u.Contact, sqlutils.NewNullString(u.Contact2))
 	if err != nil {
 		return 0, fmt.Errorf("AddUser: %v", err)
@@ -91,7 +90,7 @@ func AddUser(u structs.User) (int32, error) {
 }
 
 // AddItem adds a row to the items table
-func AddItem(i structs.Item) (int32, error) {
+func AddItem(i structs.Item, db *sql.DB) (int32, error) {
 	result, err := db.Exec("INSERT INTO items (name, description, current_user_id) VALUES (?, ?, ?)", i.Name, sqlutils.NewNullString(i.Description), i.CurrentUserID)
 	if err != nil {
 		return 0, fmt.Errorf("AddItem: %v", err)
@@ -104,15 +103,15 @@ func AddItem(i structs.Item) (int32, error) {
 }
 
 // UserByItemID queries for the user that's currently in possession of an item.
-func UserByItemID(queryItemID int32) (structs.User, error) {
+func UserByItemID(queryItemID int32, db *sql.DB) (structs.User, error) {
 	var u structs.User
 	// find the item corresponding to that item id
-	item, err := ItemByID(queryItemID)
+	item, err := ItemByID(queryItemID, db)
 	if err != nil {
 		return u, fmt.Errorf("UserByItemID %q: %v", queryItemID, err)
 	}
 	// find the user corresponding to item's current user id
-	user, err := UserByID(item.CurrentUserID)
+	user, err := UserByID(item.CurrentUserID, db)
 	if err != nil {
 		return u, fmt.Errorf("UserByItemID %q: %v", queryItemID, err)
 	}
@@ -121,7 +120,7 @@ func UserByItemID(queryItemID int32) (structs.User, error) {
 }
 
 // ItemsByString queries for items which match a string either in name or description.
-func ItemsByString(queryString string) ([]structs.Item, error) {
+func ItemsByString(queryString string, db *sql.DB) ([]structs.Item, error) {
 	var items []structs.Item
 
 	rows, err := db.Query("SELECT * FROM items WHERE name LIKE '%?%' OR description LIKE '%?%'", queryString, queryString)
@@ -145,7 +144,7 @@ func ItemsByString(queryString string) ([]structs.Item, error) {
 }
 
 // UserByID queries for the user with a specific ID
-func UserByID(queryUserid int32) (structs.User, error) {
+func UserByID(queryUserid int32, db *sql.DB) (structs.User, error) {
 	// A user to hold data from the returned row.
 	var u structs.User
 
@@ -160,7 +159,7 @@ func UserByID(queryUserid int32) (structs.User, error) {
 }
 
 // ItemByID queries for the user with a specific ID
-func ItemByID(queryItemID int32) (structs.Item, error) {
+func ItemByID(queryItemID int32, db *sql.DB) (structs.Item, error) {
 	// An item to hold data from the returned row.
 	var i structs.Item
 
@@ -175,7 +174,7 @@ func ItemByID(queryItemID int32) (structs.Item, error) {
 }
 
 // ItemsByUser queries for items that are in the possession of a user (by user ID)
-func ItemsByUser(queryUserid int32) ([]structs.Item, error) {
+func ItemsByUser(queryUserid int32, db *sql.DB) ([]structs.Item, error) {
 	// an items slice to hold data from returned rows.
 	var items []structs.Item
 
@@ -200,7 +199,7 @@ func ItemsByUser(queryUserid int32) ([]structs.Item, error) {
 }
 
 // UsersByName queries for users that have the specified name.
-func UsersByName(queryName string) ([]structs.User, error) {
+func UsersByName(queryName string, db *sql.DB) ([]structs.User, error) {
 	// A users slice to hold data from returned rows.
 	var users []structs.User
 

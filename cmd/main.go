@@ -25,8 +25,8 @@ var text = tview.NewTextView().
 
 func main() {
 
-	dbConnect.DBconnect()
-	utils.AddItemsList()
+	appDB := dbConnect.DBconnect()
+	utils.AddItemsList(appDB)
 
 	flex.SetDirection(tview.FlexRow).
 		AddItem(tview.NewFlex().
@@ -40,11 +40,11 @@ func main() {
 			app.Stop()
 		case event.Rune() == 117:
 			form.Clear(true)
-			forms.AddUserForm()
+			forms.AddUserForm(appDB)
 			pages.SwitchToPage("Add User")
 		case event.Rune() == 105:
 			form.Clear(true)
-			forms.AddItemForm()
+			forms.AddItemForm(appDB)
 			pages.SwitchToPage("Add Item")
 		}
 		return event

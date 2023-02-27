@@ -3,7 +3,6 @@ package utils
 import (
 	queries "github.com/dopaminegirl19/usership/pkg/queries"
 	structs "github.com/dopaminegirl19/usership/pkg/structs"
-
 	"database/sql"
 	"fmt"
 	"strconv"
@@ -11,14 +10,13 @@ import (
 	tview "github.com/rivo/tview"
 )
 
-var db *sql.DB
 
 var itemText = tview.NewTextView()
 var userText = tview.NewTextView()
 var itemsList = tview.NewList().ShowSecondaryText(false)
 var usersList = tview.NewList().ShowSecondaryText(false)
 
-func AddUsersList() {
+func AddUsersList(db *sql.DB) {
 	var users = make([]structs.User, 0)
 	usersList.Clear()
 
@@ -49,7 +47,7 @@ func SetUserText(user *structs.User) {
 	userText.SetText(text)
 }
 
-func AddItemsList() {
+func AddItemsList(db *sql.DB) {
 	var items = make([]structs.Item, 0)
 	itemsList.Clear()
 
@@ -70,15 +68,15 @@ func AddItemsList() {
 	}
 
 	itemsList.SetSelectedFunc(func(index int, name string, description string, shortcut rune) {
-		SetItemText(&items[index])
+		SetItemText(&items[index], db)
 	})
 }
 
-func SetItemText(item *structs.Item) {
+func SetItemText(item *structs.Item, db *sql.DB) {
 	itemText.Clear()
 
 	// Get current user info
-	current_user, _ := queries.UserByID(int32(item.CurrentUserID))
+	current_user, _ := queries.UserByID(int32(item.CurrentUserID), db)
 
 	text := item.Name + "\n" + item.Description + "\n\nCurrent user: \n" + current_user.Name + "\n" + current_user.Contact + "\n" + current_user.Contact2
 
