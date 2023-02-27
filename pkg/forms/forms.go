@@ -2,6 +2,7 @@ package forms
 
 import (
 	"strconv"
+	"database/sql"
 
 	queries "github.com/dopaminegirl19/usership/pkg/queries"
 	structs "github.com/dopaminegirl19/usership/pkg/structs"
@@ -15,7 +16,7 @@ var form = tview.NewForm().
 	SetFieldBackgroundColor(tcell.ColorRosyBrown).
 	SetButtonBackgroundColor(tcell.ColorRosyBrown)
 
-func AddUserForm() *tview.Form {
+func AddUserForm(db *sql.DB) *tview.Form {
 
 	user := structs.User{}
 	form.AddInputField("name", "", 20, nil, func(Name string) {
@@ -32,9 +33,9 @@ func AddUserForm() *tview.Form {
 
 	form.AddButton("Save", func() {
 		// users = append(users, user)
-		id, _ := queries.AddUser(user)
+		id, _ := queries.AddUser(user, db)
 		_ = id
-		utils.AddUsersList()
+		utils.AddUsersList(db)
 		pages.SwitchToPage("Menu")
 	})
 
@@ -45,7 +46,7 @@ func AddUserForm() *tview.Form {
 	return form
 }
 
-func AddItemForm() *tview.Form {
+func AddItemForm(db *sql.DB) *tview.Form {
 
 	item := structs.Item{}
 	form.AddInputField("name", "", 20, nil, func(Name string) {
@@ -63,9 +64,9 @@ func AddItemForm() *tview.Form {
 
 	form.AddButton("Save", func() {
 		// users = append(users, user)
-		id, _ := queries.AddItem(item)
+		id, _ := queries.AddItem(item, db)
 		_ = id
-		utils.AddItemsList()
+		utils.AddItemsList(db)
 		pages.SwitchToPage("Menu")
 	})
 
